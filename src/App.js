@@ -3,26 +3,31 @@ import styles from "./App.module.css";
 import { TopBar } from "./components/TopBar";
 import { CalendarHeader } from "./components/CalendarHeader";
 import { Day } from "./components/Day";
-import { DeleteEventModal } from "./components/DeleteEventModal";
-import { NewEventModal } from "./components/NewEventModal";
+import { NewNoteModal } from "./components/NewNoteModal";
 import { useDate } from "./hooks/useDate";
 
 function App() {
   const [nav, setNav] = useState(0);
   const [clicked, setClicked] = useState();
-  const [events, setEvents] = useState(
-    localStorage.getItem("events")
-      ? JSON.parse(localStorage.getItem("events"))
+  const [notes, setNotes] = useState(
+    localStorage.getItem("notes")
+      ? JSON.parse(localStorage.getItem("notes"))
       : []
   );
 
-  const eventForDate = (date) => events.find((e) => e.date === date);
+  const noteForDate = (date) => notes.find((n) => n.date === date);
 
   useEffect(() => {
-    localStorage.setItem("events", JSON.stringify(events));
-  }, [events]);
+    localStorage.setItem("notes", JSON.stringify(notes));
+  }, [notes]);
 
-  const { days, dateDisplay } = useDate(events, nav);
+  const { days, dateDisplay } = useDate(notes, nav);
+
+  const dateString = new Date(clicked).toLocaleDateString("en-gb", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 
   return (
     <>
@@ -32,6 +37,7 @@ function App() {
           dateDisplay={dateDisplay}
           onNext={() => setNav(nav + 1)}
           onBack={() => setNav(nav - 1)}
+          onToday={() => setNav(0)}
         />
         <div className={styles.weekdays}>
           <div>Mon</div>
@@ -58,24 +64,23 @@ function App() {
         </div>
       </div>
 
-      {clicked && !eventForDate(clicked) && (
-        <NewEventModal
+      {clicked && (
+        <NewNoteModal
+          noteTitle={noteForDate(clicked)?.title}
+          noteText={noteForDate(clicked)?.note}
           onClose={() => setClicked(null)}
-          onSave={(title) => {
-            setEvents([...events, { title, date: clicked }]);
+          onSave={(title, note) => {
+            setNotes([
+              ...notes.filter((n) => n.date !== clicked),
+              { title, note, date: clicked },
+            ]);
             setClicked(null);
           }}
-        />
-      )}
-
-      {clicked && eventForDate(clicked) && (
-        <DeleteEventModal
-          eventText={eventForDate(clicked).title}
-          onClose={() => setClicked(null)}
           onDelete={() => {
-            setEvents(events.filter((e) => e.date !== clicked));
+            setNotes(notes.filter((n) => n.date !== clicked));
             setClicked(null);
           }}
+          date={dateString}
         />
       )}
     </>
