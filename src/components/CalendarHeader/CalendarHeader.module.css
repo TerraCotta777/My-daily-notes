@@ -9,6 +9,13 @@
   background-color: #ea4d3c;
 	margin-left: 20px;
 }
+button.today {
+	padding-top: 6px;
+	padding-bottom: 6px;
+	background-color: #fff;
+	border: 2px solid #ea4d3c;
+	color: #ea4d3c;
+}
 .header__title {
 	font-size: 33px;
 }

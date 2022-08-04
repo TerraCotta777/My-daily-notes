@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 
-export const useDate = (events, nav) => {
+export const useDate = (notes, nav) => {
   const [dateDisplay, setDateDisplay] = useState("");
   const [days, setDays] = useState([]);
 
-  const eventForDate = (date) => events.find((e) => e.date === date);
+  const noteForDate = (date) => notes.find((e) => e.date === date);
 
   useEffect(() => {
     const weekdays = [
@@ -50,21 +50,21 @@ export const useDate = (events, nav) => {
       if (i > emptyDays) {
         daysArr.push({
           value: i - emptyDays,
-          event: eventForDate(dayString),
+          note: noteForDate(dayString),
           isCurrentDay: i - emptyDays === day && nav === 0,
           date: dayString,
         });
       } else {
         daysArr.push({
           value: "empty",
-          event: null,
+          note: null,
           isCurrentDay: false,
           date: "",
         });
       }
     }
     setDays(daysArr);
-  }, [events, nav]);
+  }, [notes, nav]);
 
   return {
     days,
