@@ -1,0 +1,17 @@
+.header {
+  padding: 10px;
+  color: #ea4d3c;
+  font-size: 26px;
+  display: flex;
+  justify-content: space-between;
+}
+.header button {
+  background-color: #ea4d3c;
+	margin-left: 20px;
+}
+.header__title {
+	font-size: 33px;
+}
+.header span {
+	font-weight: 700;
+}
