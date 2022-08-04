@@ -1,0 +1,26 @@
+.topBar {
+	position: relative;
+  height: 70px;
+  width: 100%;
+  margin-bottom: 30px;
+  padding: 0 35px;
+  font-weight: 800;
+  font-size: 32px;
+  color: #ffffff;
+  background: #59cfdf;
+}
+
+.topBar span::before {
+  content: "";
+  position: relative;
+  top: 5px;
+  width: 32px;
+  height: 32px;
+  margin-right: 20px;
+  margin-top: 15px;
+  display: inline-block;
+  -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
+  border-radius: 20px;
+  background: #ea4d3c;
+}

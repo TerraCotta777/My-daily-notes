@@ -1,0 +1,43 @@
+.day {
+  width: 98px;
+  padding: 10px;
+  height: 98px;
+  cursor: pointer;
+  box-sizing: border-box;
+  background-color: white;
+  margin: 1px;
+  box-shadow: 0px 0px 3px #cbd4c2;
+  text-align: right;
+}
+.day:hover {
+  background-color: #e8faed;
+}
+.day + .currentDay span {
+  width: 29px;
+  height: 27px;
+  border-radius: 20px;
+  background-color: #ea4d3c;
+  color: #ffffff;
+  position: relative;
+  bottom: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  padding-bottom: 2px;
+  margin-left: auto;
+}
+.event {
+  background-color: #ea4d3c;
+  border-radius: 25px;
+  overflow: hidden;
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 10px;
+}
+.empty {
+  cursor: default !important;
+  background-color: #fffcff !important;
+  box-shadow: none !important;
+}
