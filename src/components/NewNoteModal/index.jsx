@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import styles from "../NewNoteModal/NewNoteModal.module.css";
 
 export const NewNoteModal = (props) => {
-  const [title, setTitle] = useState(props.noteTitle ? props.noteTitle : "");
-  const [note, setNote] = useState(props.noteText ? props.noteText : "");
+  const [title, setTitle] = useState("");
+  const [note, setNote] = useState("");
   const [error, setError] = useState(false);
 
   return (
@@ -27,7 +27,6 @@ export const NewNoteModal = (props) => {
           <button
             onClick={() => {
               if (title && note) {
-                props.onDelete();
                 setError(false);
                 props.onSave(title, note);
               } else {

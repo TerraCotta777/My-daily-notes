@@ -4,18 +4,20 @@ import { TopBar } from "./components/TopBar";
 import { CalendarHeader } from "./components/CalendarHeader";
 import { Day } from "./components/Day";
 import { NewNoteModal } from "./components/NewNoteModal";
+import { ViewNotesModal } from "./components/ViewNotesModal";
 import { useDate } from "./hooks/useDate";
 
 function App() {
   const [nav, setNav] = useState(0);
   const [clicked, setClicked] = useState();
+  const [noteItem, setNoteItem] = useState();
   const [notes, setNotes] = useState(
     localStorage.getItem("notes")
       ? JSON.parse(localStorage.getItem("notes"))
       : []
   );
 
-  const noteForDate = (date) => notes.find((n) => n.date === date);
+  const notesForDate = (date) => notes.filter((n) => n.date === date);
 
   useEffect(() => {
     localStorage.setItem("notes", JSON.stringify(notes));
@@ -57,6 +59,7 @@ function App() {
               onClick={() => {
                 if (d.value !== "empty") {
                   setClicked(d.date);
+									console.log(d.date)
                 }
               }}
             />
@@ -64,23 +67,33 @@ function App() {
         </div>
       </div>
 
-      {clicked && (
-        <NewNoteModal
-          noteTitle={noteForDate(clicked)?.title}
-          noteText={noteForDate(clicked)?.note}
-          onClose={() => setClicked(null)}
-          onSave={(title, note) => {
-            setNotes([
-              ...notes.filter((n) => n.date !== clicked),
-              { title, note, date: clicked },
-            ]);
-            setClicked(null);
-          }}
-          onDelete={() => {
-            setNotes(notes.filter((n) => n.date !== clicked));
-            setClicked(null);
-          }}
+      {clicked &&
+        (notes.filter((n) => n.date === clicked).length === 0 || noteItem) && (
+          <NewNoteModal
+            notes={notesForDate(clicked)}
+            setNoteItem={setNoteItem}
+            onClose={() => setClicked(null)}
+            onSave={(title, note) => {
+              setNotes([...notes, { title, note, date: clicked }]);
+              setClicked(null);
+            }}
+            onDelete={() => {
+              setNotes(notes.filter((n) => n.date !== clicked));
+              setClicked(null);
+            }}
+            date={dateString}
+          />
+        )}
+
+      {notes.filter((n) => n.date === clicked).length >= 1 && (
+        <ViewNotesModal
+          notes={notes.filter((n) => n.date === clicked)}
           date={dateString}
+          setClicked={setClicked}
+          setNoteItem={setNoteItem}
+          onClose={() => {
+            setClicked(null);
+          }}
         />
       )}
     </>
