@@ -52,7 +52,7 @@ export const EditModal = ({
           <button onClick={handleSubmit} className={styles.saveButton}>
             Save
           </button>
-          {title && (
+          {noteData && (
             <button
               id="delete"
               onClick={handleSubmit}
