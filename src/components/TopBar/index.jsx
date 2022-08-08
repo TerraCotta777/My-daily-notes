@@ -1,6 +1,10 @@
 import React from "react";
-import styles from "./TopBar.module.css";
+import styles from "./styles.module.css";
 
 export const TopBar = () => {
-  return <div className={styles.topBar}><span>My Daily Notes</span></div>;
+  return (
+    <div className={styles.topBar}>
+      <span>My Daily Notes</span>
+    </div>
+  );
 };

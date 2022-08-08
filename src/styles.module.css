@@ -4,6 +4,10 @@ body {
   font-family: "Montserrat", sans-serif;
   background-color: #fffcff;
 }
+ul {
+	margin: 0;
+	padding: 0;
+}
 button {
   margin-right: 2.5px;
   margin-left: 2.5px;

@@ -1,27 +1,25 @@
-import React, { useState, useEffect } from "react";
-import styles from "./App.module.css";
+import React, { useState, useEffect, useCallback } from "react";
 import { TopBar } from "./components/TopBar";
-import { CalendarHeader } from "./components/CalendarHeader";
-import { Day } from "./components/Day";
-import { NewNoteModal } from "./components/NewNoteModal";
+import { Calendar } from "./components/Calendar";
+import { NoteModal } from "./components/Modal";
 import { useDate } from "./hooks/useDate";
 
 function App() {
   const [nav, setNav] = useState(0);
-  const [clicked, setClicked] = useState();
-  const [notes, setNotes] = useState(
+  const [clicked, setClicked] = useState(null);
+  const [notesData, setNotesData] = useState(
     localStorage.getItem("notes")
       ? JSON.parse(localStorage.getItem("notes"))
       : []
   );
 
-  const noteForDate = (date) => notes.find((n) => n.date === date);
+  const notesForDate = (date) => notesData.filter((n) => n.date === date);
 
   useEffect(() => {
-    localStorage.setItem("notes", JSON.stringify(notes));
-  }, [notes]);
+    localStorage.setItem("notes", JSON.stringify(notesData));
+  }, [notesData]);
 
-  const { days, dateDisplay } = useDate(notes, nav);
+  const { days, dateDisplay } = useDate(notesData, nav);
 
   const dateString = new Date(clicked).toLocaleDateString("en-gb", {
     day: "numeric",
@@ -29,58 +27,59 @@ function App() {
     year: "numeric",
   });
 
+  const handleSave = useCallback(
+    (id, title, note) => {
+      setNotesData([...notesData, { id, title, note, date: clicked }]);
+      setClicked(null);
+    },
+    [notesData, clicked]
+  );
+
+  const handleUpdate = useCallback(
+    (id, title, note) => {
+      const updatedNotesArray = notesData.map((n) => {
+        if (n.id === id) {
+          return { ...n, title, note };
+        } else {
+          return n;
+        }
+      });
+      setNotesData(updatedNotesArray);
+      setClicked(null);
+    },
+    [notesData]
+  );
+
+  const handleDelete = useCallback(
+    (id) => {
+      setNotesData(notesData.filter((n) => n.id !== id));
+      setClicked(null);
+    },
+    [notesData]
+  );
+
   return (
     <>
       <TopBar />
-      <div className={styles.container}>
-        <CalendarHeader
-          dateDisplay={dateDisplay}
-          onNext={() => setNav(nav + 1)}
-          onBack={() => setNav(nav - 1)}
-          onToday={() => setNav(0)}
-        />
-        <div className={styles.weekdays}>
-          <div>Mon</div>
-          <div>Tue</div>
-          <div>Wed</div>
-          <div>Thu</div>
-          <div>Fri</div>
-          <div>Sat</div>
-          <div>Sun</div>
-        </div>
 
-        <div className={styles.calendar}>
-          {days.map((d, index) => (
-            <Day
-              day={d}
-              key={index}
-              onClick={() => {
-                if (d.value !== "empty") {
-                  setClicked(d.date);
-                }
-              }}
-            />
-          ))}
-        </div>
-      </div>
+      <Calendar
+        dateDisplay={dateDisplay}
+        nav={nav}
+        setNav={setNav}
+        days={days}
+        setClicked={setClicked}
+      />
 
       {clicked && (
-        <NewNoteModal
-          noteTitle={noteForDate(clicked)?.title}
-          noteText={noteForDate(clicked)?.note}
-          onClose={() => setClicked(null)}
-          onSave={(title, note) => {
-            setNotes([
-              ...notes.filter((n) => n.date !== clicked),
-              { title, note, date: clicked },
-            ]);
-            setClicked(null);
-          }}
-          onDelete={() => {
-            setNotes(notes.filter((n) => n.date !== clicked));
-            setClicked(null);
-          }}
+        <NoteModal
+          currentDayNotes={notesForDate(clicked)}
           date={dateString}
+          onClose={() => setClicked(null)}
+          onSave={handleSave}
+          onUpdate={handleUpdate}
+          onDelete={handleDelete}
+          setClicked={setClicked}
+          clicked={clicked}
         />
       )}
     </>

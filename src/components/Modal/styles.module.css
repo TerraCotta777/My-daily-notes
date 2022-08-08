@@ -26,7 +26,16 @@ h2 {
 .noteTitleInput.error {
   border: 2px solid red;
 }
+.noteItem {
+	cursor: pointer;
+	background-color: #59cfdf45;
+	padding: 10px;
+	border-radius: 2px;
+	list-style: none;
+	margin-bottom: 10px;
+}
 .buttonsDiv {
+	margin-top: 20px;
 	display: flex;
 	justify-content: space-between;
 }
@@ -35,6 +44,9 @@ h2 {
 	padding-left: 15px;
 	font-weight: 600;
 	box-shadow: none;
+}
+.buttonsDiv button:only-child {
+	margin: 0 auto;
 }
 .deleteButton {
   background-color: #d36c6c;

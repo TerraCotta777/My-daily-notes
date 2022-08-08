@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 
-export const useDate = (notes, nav) => {
+export const useDate = (notesData, nav) => {
   const [dateDisplay, setDateDisplay] = useState("");
   const [days, setDays] = useState([]);
 
-  const noteForDate = (date) => notes.find((e) => e.date === date);
+  const notesForDate = (date) => notesData.filter((e) => e.date === date);
 
   useEffect(() => {
     const weekdays = [
@@ -40,31 +40,57 @@ export const useDate = (notes, nav) => {
     setDateDisplay(
       `${dt.toLocaleDateString("en-us", { month: "long" })} ${year}`
     );
+
     const emptyDays = weekdays.indexOf(dateString.split(", ")[0]);
-
     const daysArr = [];
+    let daysInPrevMonth = [];
+    let daysInNextMonth = [];
 
-    for (let i = 1; i <= emptyDays + daysInMonth; i++) {
+    const daysNumberPrevMonth = new Date(year, month, 0).getDate();
+    daysInPrevMonth = Array.from(
+      { length: daysNumberPrevMonth },
+      (_, i) => i + 1
+    );
+    daysInNextMonth = Array.from({ length: 28 }, (_, i) => i + 1);
+
+    daysInPrevMonth = daysInPrevMonth.slice(
+      daysInPrevMonth.length - emptyDays,
+      daysInPrevMonth.length
+    );
+
+    for (let i = 1; i <= 42; i++) {
       const dayString = `${month + 1}/${i - emptyDays}/${year}`;
 
-      if (i > emptyDays) {
+      if (i > emptyDays && i <= daysInMonth + emptyDays) {
         daysArr.push({
           value: i - emptyDays,
-          note: noteForDate(dayString),
+          notes: (notesForDate(dayString).length > 0 ? notesForDate(dayString) : null),
           isCurrentDay: i - emptyDays === day && nav === 0,
           date: dayString,
+          type: "current",
+        });
+      } else if (i <= emptyDays) {
+        daysArr.push({
+          value: daysInPrevMonth[i - 1],
+          notes: null,
+          isCurrentDay: false,
+          date: `${month}/${daysInPrevMonth[i - 1]}/${year}`,
+          type: "empty",
         });
       } else {
         daysArr.push({
-          value: "empty",
-          note: null,
+          value: daysInNextMonth[i - daysInMonth - 1 - emptyDays],
+          notes: null,
           isCurrentDay: false,
-          date: "",
+          date: `${month + 2}/${
+            daysInNextMonth[i - daysInMonth - 1 - emptyDays]
+          }/${year}`,
+          type: "empty",
         });
       }
     }
     setDays(daysArr);
-  }, [notes, nav]);
+  }, [notesData, nav]);
 
   return {
     days,

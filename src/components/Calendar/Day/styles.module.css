@@ -10,7 +10,7 @@
   text-align: right;
 }
 .day:hover {
-  background-color: #e8faed;
+  background-color: #59cfdf61;
 }
 .day + .currentDay span {
   width: 29px;
@@ -37,7 +37,5 @@
   margin-right: 10px;
 }
 .empty {
-  cursor: default !important;
-  background-color: #fffcff !important;
-  box-shadow: none !important;
+  color: #aca9a9;
 }
