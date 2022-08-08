@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 
-export const useDate = (notes, nav) => {
+export const useDate = (notesData, nav) => {
   const [dateDisplay, setDateDisplay] = useState("");
   const [days, setDays] = useState([]);
 
-  const noteForDate = (date) => notes.find((e) => e.date === date);
+  const notesForDate = (date) => notesData.filter((e) => e.date === date);
 
   useEffect(() => {
     const weekdays = [
@@ -64,7 +64,7 @@ export const useDate = (notes, nav) => {
       if (i > emptyDays && i <= daysInMonth + emptyDays) {
         daysArr.push({
           value: i - emptyDays,
-          note: noteForDate(dayString),
+          notes: (notesForDate(dayString).length > 0 ? notesForDate(dayString) : null),
           isCurrentDay: i - emptyDays === day && nav === 0,
           date: dayString,
           type: "current",
@@ -72,7 +72,7 @@ export const useDate = (notes, nav) => {
       } else if (i <= emptyDays) {
         daysArr.push({
           value: daysInPrevMonth[i - 1],
-          note: null,
+          notes: null,
           isCurrentDay: false,
           date: `${month}/${daysInPrevMonth[i - 1]}/${year}`,
           type: "empty",
@@ -80,7 +80,7 @@ export const useDate = (notes, nav) => {
       } else {
         daysArr.push({
           value: daysInNextMonth[i - daysInMonth - 1 - emptyDays],
-          note: null,
+          notes: null,
           isCurrentDay: false,
           date: `${month + 2}/${
             daysInNextMonth[i - daysInMonth - 1 - emptyDays]
@@ -90,7 +90,7 @@ export const useDate = (notes, nav) => {
       }
     }
     setDays(daysArr);
-  }, [notes, nav]);
+  }, [notesData, nav]);
 
   return {
     days,

@@ -1,15 +1,36 @@
 import React, { useState } from "react";
-import styles from "../NewNoteModal/NewNoteModal.module.css";
+import styles from "../styles.module.css";
 
-export const NewNoteModal = (props) => {
-  const [title, setTitle] = useState("");
-  const [note, setNote] = useState("");
+export const EditModal = ({
+  date,
+  onSave,
+  onUpdate,
+  onClose,
+  onDelete,
+  noteData,
+}) => {
+  const [title, setTitle] = useState(noteData?.title || "");
+  const [note, setNote] = useState(noteData?.note || "");
   const [error, setError] = useState(false);
+
+  const handleSubmit = () => {
+    if (noteData?.id) {
+      const { id } = noteData;
+      setError(false);
+      onUpdate(id, title, note);
+    } else if (title && note) {
+      setError(false);
+      const id = String(Math.random() * 1000);
+      onSave(id, title, note);
+    } else {
+      setError(true);
+    }
+  };
 
   return (
     <div>
       <div className={styles.newNoteModalWindow}>
-        <h2>{props.date}</h2>
+        <h2>{date}</h2>
 
         <input
           className={`${styles.noteTitleInput} ${error ? styles.error : ""}`}
@@ -24,25 +45,15 @@ export const NewNoteModal = (props) => {
           placeholder="Note"
         />
         <div className={styles.buttonsDiv}>
-          <button
-            onClick={() => {
-              if (title && note) {
-                setError(false);
-                props.onSave(title, note);
-              } else {
-                setError(true);
-              }
-            }}
-            className={styles.saveButton}
-          >
+          <button onClick={handleSubmit} className={styles.saveButton}>
             Save
           </button>
           {title && (
-            <button onClick={props.onDelete} className={styles.deleteButton}>
+            <button onClick={onDelete} className={styles.deleteButton}>
               Delete
             </button>
           )}
-          <button onClick={props.onClose} className={styles.cancelButton}>
+          <button onClick={onClose} className={styles.cancelButton}>
             Cancel
           </button>
         </div>

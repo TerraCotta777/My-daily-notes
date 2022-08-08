@@ -1,7 +1,7 @@
 import React from "react";
-import styles from "./CalendarHeader.module.css";
+import styles from "./styles.module.css";
 
-export const CalendarHeader = ({ onNext, onBack, onToday, dateDisplay }) => {
+export const Header = ({ onNext, onBack, onToday, dateDisplay }) => {
   return (
     <div className={styles.header}>
       <div className={styles.header__title}>
