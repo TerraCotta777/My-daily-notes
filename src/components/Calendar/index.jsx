@@ -6,7 +6,7 @@ import styles from "../../styles.module.css";
 
 export const Calendar = ({ dateDisplay, nav, setNav, days, setClicked }) => {
   return (
-    <>
+    <div className={styles.container}>
       <Header
         dateDisplay={dateDisplay}
         onNext={() => setNav(nav + 1)}
@@ -34,6 +34,6 @@ export const Calendar = ({ dateDisplay, nav, setNav, days, setClicked }) => {
           />
         ))}
       </div>
-    </>
+    </div>
   );
 };

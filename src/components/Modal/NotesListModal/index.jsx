@@ -10,7 +10,9 @@ export const NotesListModal = ({
   setEditMode,
   setNoteData,
   clicked,
+	buttonDisplay
 }) => {
+
   const editHandler = (note) => {
     setEditMode(true);
     setNoteData(note);
@@ -18,9 +20,8 @@ export const NotesListModal = ({
 
   const createHandler = () => {
     setEditMode(true);
-    setClicked(date);
+    setClicked(clicked);
   };
-
 
   return (
     <div>
@@ -38,9 +39,11 @@ export const NotesListModal = ({
           ))}
         </ul>
         <div className={styles.buttonsDiv}>
-          <button onClick={createHandler} className={styles.saveButton}>
-            New
-          </button>
+          {buttonDisplay && (
+            <button onClick={createHandler} className={styles.saveButton}>
+              New
+            </button>
+          )}
           <button onClick={onClose} className={styles.cancelButton}>
             Cancel
           </button>

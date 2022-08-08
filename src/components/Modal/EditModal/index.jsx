@@ -13,11 +13,15 @@ export const EditModal = ({
   const [note, setNote] = useState(noteData?.note || "");
   const [error, setError] = useState(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
     if (noteData?.id) {
       const { id } = noteData;
       setError(false);
-      onUpdate(id, title, note);
+      if (e.target.id === "delete") {
+        onDelete(id);
+      } else {
+        onUpdate(id, title, note);
+      }
     } else if (title && note) {
       setError(false);
       const id = String(Math.random() * 1000);
@@ -49,7 +53,11 @@ export const EditModal = ({
             Save
           </button>
           {title && (
-            <button onClick={onDelete} className={styles.deleteButton}>
+            <button
+              id="delete"
+              onClick={handleSubmit}
+              className={styles.deleteButton}
+            >
               Delete
             </button>
           )}

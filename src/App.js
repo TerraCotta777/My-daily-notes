@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from "react";
-import styles from "./styles.module.css";
 import { TopBar } from "./components/TopBar";
 import { Calendar } from "./components/Calendar";
 import { NoteModal } from "./components/Modal";
@@ -51,25 +50,35 @@ function App() {
     [notesData]
   );
 
+  const handleDelete = useCallback(
+    (id) => {
+      setNotesData(notesData.filter((n) => n.id !== id));
+      setClicked(null);
+    },
+    [notesData]
+  );
+
   return (
     <>
       <TopBar />
-      <div className={styles.container}>
-        <Calendar dateDisplay={dateDisplay} nav={nav} setNav={setNav} days={days} setClicked={setClicked} />
-      </div>
+
+      <Calendar
+        dateDisplay={dateDisplay}
+        nav={nav}
+        setNav={setNav}
+        days={days}
+        setClicked={setClicked}
+      />
 
       {clicked && (
         <NoteModal
           currentDayNotes={notesForDate(clicked)}
+          date={dateString}
           onClose={() => setClicked(null)}
           onSave={handleSave}
           onUpdate={handleUpdate}
+          onDelete={handleDelete}
           setClicked={setClicked}
-          onDelete={() => {
-            setNotesData(notesData.filter((n) => n.date !== clicked));
-            setClicked(null);
-          }}
-          date={dateString}
           clicked={clicked}
         />
       )}

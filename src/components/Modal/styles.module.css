@@ -45,6 +45,9 @@ h2 {
 	font-weight: 600;
 	box-shadow: none;
 }
+.buttonsDiv button:only-child {
+	margin: 0 auto;
+}
 .deleteButton {
   background-color: #d36c6c;
 }
